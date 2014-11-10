@@ -1,0 +1,317 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1343\cocoasubrtf140
+{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red128\green128\blue128;\red13\green100\blue1;\red17\green0\blue171;
+\red222\green221\blue73;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+
+\f0\fs22 \cf0 \cb2 \CocoaLigature0 Last login: Thu Nov  6 12:01:57 on ttys001\
+\cf3 ~\cf4  [\cf0  python                                                           \cf4 ] \cf3 12:02 \cf5 PM\cf0 \
+Python 2.7.6 |Anaconda 1.9.2 (x86_64)| (default, May 27 2014, 14:58:54) \
+[GCC 4.0.1 (Apple Inc. build 5493)] on darwin\
+Type "help", "copyright", "credits" or "license" for more information.\
+Anaconda is brought to you by Continuum Analytics.\
+Please check out: http://continuum.io and https://binstar.org\
+>>> exit()\
+\cf3 ~\cf4  [\cf0  /Users/shivinkapur/Documents/Shivin\\ College/UCLA/UCLA\\ Classes/Fall\\ 14/CS131/Lecture\\ Notes/Week\\ 5 \
+\cf3 Lecture Notes/Week 5\cf4  [\cf0  python                                        \cf4 ] \cf3 12:02 \cf5 PM\cf0 \
+Python 2.7.6 |Anaconda 1.9.2 (x86_64)| (default, May 27 2014, 14:58:54) \
+[GCC 4.0.1 (Apple Inc. build 5493)] on darwin\
+Type "help", "copyright", "credits" or "license" for more information.\
+Anaconda is brought to you by Continuum Analytics.\
+Please check out: http://continuum.io and https://binstar.org\
+>>> i = 345\
+>>> type(i)\
+<type 'int'>\
+>>> type(i)==int\
+True\
+>>> type(i)==string\
+Traceback (most recent call last):\
+  File "<stdin>", line 1, in <module>\
+NameError: name 'string' is not defined\
+>>> type(i)==str\
+False\
+>>> load(lecture9.py)\
+Traceback (most recent call last):\
+  File "<stdin>", line 1, in <module>\
+NameError: name 'load' is not defined\
+>>> for c in 'hello'\
+  File "<stdin>", line 1\
+    for c in 'hello'\
+                   ^\
+SyntaxError: invalid syntax\
+>>> for c in 'hello' \
+  File "<stdin>", line 1\
+    for c in 'hello' \
+                    ^\
+SyntaxError: invalid syntax\
+>>> for c in 'hello' :\
+... print c\
+  File "<stdin>", line 2\
+    print c\
+        ^\
+IndentationError: expected an indented block\
+>>> for c in 'hello': \
+...     print c\
+... \
+h\
+e\
+l\
+l\
+o\
+>>> s = "hello my name is todd"\
+>>> s.split(" ")\
+['hello', 'my', 'name', 'is', 'todd']\
+>>> s.plit("m")\
+Traceback (most recent call last):\
+  File "<stdin>", line 1, in <module>\
+AttributeError: 'str' object has no attribute 'plit'\
+>>> s = "hello my name is todd"\
+>>> s.split(" ")\
+['hello', 'my', 'name', 'is', 'todd']\
+>>> s.plit("m")\
+Traceback (most recent call last):\
+  File "<stdin>", line 1, in <module>\
+AttributeError: 'str' object has no attribute 'plit'\
+>>> s.split("m")\
+['hello ', 'y na', 'e is todd']\
+>>> help(string)\
+Traceback (most recent call last):\
+  File "<stdin>", line 1, in <module>\
+NameError: name 'string' is not defined\
+>>> help(s)\
+no Python documentation found for 'hello my name is todd'\
+\
+>>> "m" in s\
+True\
+>>> 'm' in s\
+True\
+>>> f = (lambda x: x+1)\
+>>> map(f,[1,2,3,4,5])\
+[2, 3, 4, 5, 6]\
+>>> reduce((lambda x,y:x+y),[1,2,3,4,5,6,])\
+21\
+>>> reduce((lambda x,y:x+y),[1,2,3,4,5,6,],0)\
+21\
+>>> reduce((lambda x,y:x+y),[1,2,3,4,5,6,],34)\
+55\
+>>> [x+1 ofr x in [1,2,3,4,5]]\
+  File "<stdin>", line 1\
+    [x+1 ofr x in [1,2,3,4,5]]\
+           ^\
+SyntaxError: invalid syntax\
+>>> [x+1 for x in [1,2,3,4,5]]\
+[2, 3, 4, 5, 6]\
+>>> filter((lambda x:x%2 == 1),l)\
+Traceback (most recent call last):\
+  File "<stdin>", line 1, in <module>\
+NameError: name 'l' is not defined\
+>>> filter((lambda x:x%2 == 1),l) [1,2,3]\
+Traceback (most recent call last):\
+  File "<stdin>", line 1, in <module>\
+NameError: name 'l' is not defined\
+>>> filter((lambda x:x%2 == 1),[1,2,3])\
+[1, 3]\
+>>> \
+>>> l1 = [1,2,3,4]\
+>>> l2 = [5,6,7,8]\
+>>> \
+>>> [x*y for x in l1 for y in l2]\
+[5, 6, 7, 8, 10, 12, 14, 16, 15, 18, 21, 24, 20, 24, 28, 32]\
+>>> \
+>>> def unzip(l):\
+...     ([x[0] for x in l], [x[1] for x in l])\
+... \
+>>> unzip([(1,2),(3,4)])\
+>>> l\
+Traceback (most recent call last):\
+  File "<stdin>", line 1, in <module>\
+NameError: name 'l' is not defined\
+>>> l=[1,2,3,4,5]\
+>>> l\
+[1, 2, 3, 4, 5]\
+>>> l[0]\
+1\
+>>> l[1:]\
+[2, 3, 4, 5]\
+>>> l[1:3]\
+[2, 3]\
+>>> \
+>>> def unzip(l):\
+...     return ([x[0] for x in l], [x[1] for x in l])\
+... \
+>>> unzip([(1,2),(3,4)])\
+([1, 3], [2, 4])\
+>>> help(l)\
+\
+>>> ll = [[1,2,3], [4,5,6], [7,8,9]] \
+>>> map((lambda l : l.reverse()),ll)\
+[None, None, None]\
+>>> def myReverse(l):\
+...     l.reverse()\
+...     return l\
+... \
+>>> ll\
+[[3, 2, 1], [6, 5, 4], [9, 8, 7]]\
+>>> map((lambda l : l.myReverse(l)),ll)\
+Traceback (most recent call last):\
+  File "<stdin>", line 1, in <module>\
+  File "<stdin>", line 1, in <lambda>\
+AttributeError: 'list' object has no attribute 'myReverse'\
+>>> \
+>>> def quicksort(l):\
+...     if(l==[]):\
+...             return l\
+...     else:\
+...             return quicksort([x for x in l[1:] if x<= l[0]]) + [l[0]] + \\\
+...                     quicksort([x for x in l[1:] if x>l[0]])\
+...     \
+... \
+>>> quicksort([3,4,12,5,2]\
+... \
+... \
+... )\
+[2, 3, 4, 5, 12]\
+>>> def isPrime(n):\
+...     if n==1:\
+...             return False\
+...     else:\
+...             for i in range(2,n-1)\
+  File "<stdin>", line 5\
+    for i in range(2,n-1)\
+                        ^\
+SyntaxError: invalid syntax\
+>>>                     if n%i == 0:\
+  File "<stdin>", line 1\
+    if n%i == 0:\
+    ^\
+IndentationError: unexpected indent\
+>>>                             return False\
+  File "<stdin>", line 1\
+    return False\
+    ^\
+IndentationError: unexpected indent\
+>>>             return True\
+  File "<stdin>", line 1\
+    return True\
+    ^\
+IndentationError: unexpected indent\
+>>> \
+>>> def primesUpTo(n):\
+...             return [x for x in range(2,n+1) if isPrime(x)]\
+... \
+>>> primesUpTo(100)\
+Traceback (most recent call last):\
+  File "<stdin>", line 1, in <module>\
+  File "<stdin>", line 2, in primesUpTo\
+NameError: global name 'isPrime' is not defined\
+>>> def isPrime(n):\
+...     if n==1:\
+...             return False\
+...     else:\
+...             for i in range(2,n-1)\
+  File "<stdin>", line 5\
+    for i in range(2,n-1)\
+                        ^\
+SyntaxError: invalid syntax\
+>>>                     if n%i == 0:\
+  File "<stdin>", line 1\
+    if n%i == 0:\
+    ^\
+IndentationError: unexpected indent\
+>>>                             return False\
+  File "<stdin>", line 1\
+    return False\
+    ^\
+IndentationError: unexpected indent\
+>>>             return True\
+  File "<stdin>", line 1\
+    return True\
+    ^\
+IndentationError: unexpected indent\
+>>> def isPrime(n):\
+...     if n==1:\
+...             return False\
+...     else:\
+...             for i in range(2,n-1)\
+  File "<stdin>", line 5\
+    for i in range(2,n-1)\
+                        ^\
+SyntaxError: invalid syntax\
+>>>                     if n%i == 0:\
+  File "<stdin>", line 1\
+    if n%i == 0:\
+    ^\
+IndentationError: unexpected indent\
+>>>                             return False\
+  File "<stdin>", line 1\
+    return False\
+    ^\
+IndentationError: unexpected indent\
+>>>             return True\
+  File "<stdin>", line 1\
+    return True\
+    ^\
+IndentationError: unexpected indent\
+>>> \
+>>> \
+>>> def isPrime2(n):\
+...     return not reduce(lambda i,b: (n%i==0) or b, range(2,n-1), False)\
+... \
+>>> isPrime(33)\
+Traceback (most recent call last):\
+  File "<stdin>", line 1, in <module>\
+NameError: name 'isPrime' is not defined\
+>>> isPrime2(33)\
+Traceback (most recent call last):\
+  File "<stdin>", line 1, in <module>\
+  File "<stdin>", line 2, in isPrime2\
+  File "<stdin>", line 2, in <lambda>\
+ZeroDivisionError: integer division or modulo by zero\
+>>> \
+>>> def isPrime3(n):\
+...     return filter(lambda i: (n%i==0), range(2,n)) == []\
+... \
+>>> isPrime3(23)\
+True\
+>>> isPrime3(24)\
+False\
+>>> \{'name':'mypoint','x':3.4,'y':5.6\}\
+\{'y': 5.6, 'x': 3.4, 'name': 'mypoint'\}\
+>>> mydict = \{'name':'mypoint','x':3.4,'y':5.6\}\
+>>> \
+>>> \
+>>> \
+>>> \
+>>> mydict['name']\
+'mypoint'\
+>>> mydict['color'] = 'red'\
+>>> mydict\
+\{'y': 5.6, 'x': 3.4, 'name': 'mypoint', 'color': 'red'\}\
+>>> 'name' in mydict\
+True\
+>>> def frequency(l):\
+...     mydict = \{\}\
+...     for x in l:\
+...             if x in mydict:\
+...                     mydict[x]+= 1\
+...             else:\
+...                     mydict[x] = 1\
+...                     \
+... \
+>>> frequency([1,1,2,3,4,2,3,8])\
+>>> def frequency(l):\
+...     mydict = \{\}\
+...     for x in l:\
+...             if x in mydict:\
+...                     mydict[x]+= 1\
+...             else:\
+...                     mydict[x] = 1\
+...     return mydict\
+... \
+>>> frequency([1,1,2,3,4,2,3,8])\
+\{8: 1, 1: 2, 2: 2, 3: 2, 4: 1\}\
+>>> frequency("Hello my name is Shivin Kapur")\
+\{'a': 2, ' ': 5, 'e': 2, 'i': 3, 'H': 1, 'K': 1, 'v': 1, 'm': 2, 'l': 2, 'o': 1, 'n': 2, 'p': 1, 's': 1, 'r': 1, 'u': 1, 'h': 1, 'y': 1, 'S': 1\}\
+>>> \
+}

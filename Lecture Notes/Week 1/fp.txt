@@ -1,0 +1,21 @@
+
+Intro to Functional Programming
+
+distinguishing characteristics:
+
+* the minimization of side effects
+   - the value of a variable never changes
+
+  - simplifies program reasoning
+
+  - functions are mathematical functions
+
+  - parallelism for free
+
+* first-class functions (lambdas, closures)
+  - functions as first-class data
+
+OCaml - a dialect of ML
+ocaml.org
+on the SEAS machines: /usr/local/cs/bin/ocaml
+
