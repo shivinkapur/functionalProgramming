@@ -144,20 +144,34 @@ def gaussianBlur(ppm, radius, sigma):
     width = ppm['width']
     height = ppm['height']
     pixelsGaussian = ppm['pixels']
-    R_blur = 0.0
-    B_blur = 0.0
-    G_blur = 0.0
     pixels_blur_all = list(pixelsGaussian)
-    for i in range(radius, height-radius):
-        for j in range(radius, width-radius):
+    for i in range(0, height):
+        for j in range(0, width):
             R_blur = 0.0
             B_blur = 0.0
             G_blur = 0.0
             for x in range(-radius, radius+1):
                 for y in range(-radius, radius+1):
-                    R_blur += gfilter[x+radius][y+radius] * pixelsGaussian[(i+x)*width+j+y][0]
-                    B_blur += gfilter[x+radius][y+radius] * pixelsGaussian[(i+x)*width+j+y][1]
-                    G_blur += gfilter[x+radius][y+radius] * pixelsGaussian[(i+x)*width+j+y][2]
+                    xx = x
+                    yy = y
+                    if((i+x) < 0):
+                        xx = i
+                    if((j+y) < 0):
+                        yy = j
+                    if((i+x) > (height-1)):
+                        xx = height - i - 1
+                    if((j+y) > (width-1)):
+                        yy = width - j - 1
+                    R_blur += gfilter[x+radius][y+radius] * pixelsGaussian[(i+xx)*width+j+yy][0]
+                    B_blur += gfilter[x+radius][y+radius] * pixelsGaussian[(i+xx)*width+j+yy][1]
+                    G_blur += gfilter[x+radius][y+radius] * pixelsGaussian[(i+xx)*width+j+yy][2]
+                    # try:
+                    #     R_blur += gfilter[x+radius][y+radius] * pixelsGaussian[(i+xx)*width+j+yy][0]
+                    #     B_blur += gfilter[x+radius][y+radius] * pixelsGaussian[(i+xx)*width+j+yy][1]
+                    #     G_blur += gfilter[x+radius][y+radius] * pixelsGaussian[(i+xx)*width+j+yy][2]
+                    # except IndexError:
+                    #     print xx, yy, x, y, i, j
+                    #     raise
             pixels_blur_all[i*width+j] = (int(round(R_blur)), int(round(B_blur)), int(round(G_blur)))
     ppmGaussian = {}
     ppmGaussian['width'] = ppm['width']
