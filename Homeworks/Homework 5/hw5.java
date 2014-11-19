@@ -14,7 +14,7 @@ import java.util.*;
 // a type for arithmetic expressions
 interface AExp {
     double eval(); 	                       // Problem 1a
-    // List<AInstr> compile(); 	               // Problem 1c
+    List<AInstr> compile(); 	               // Problem 1c
 }
 
 class Num implements AExp {
@@ -26,6 +26,12 @@ class Num implements AExp {
 
     public double eval() {
       return val;
+    }
+
+    public List<AInstr> compile() {
+      List<AInstr> l = new LinkedList<AInstr>();
+      l.add(new Push(val));
+      return l;
     }
 }
 
@@ -41,6 +47,13 @@ class BinOp implements AExp {
 
     public double eval(){
       return op.calculate(left.eval(), right.eval());
+    }
+
+    public List<AInstr> compile() {
+      List<AInstr> l = left.compile();
+      l.addAll(right.compile());
+      l.add(new Calculate(op));
+      return l;
     }
 }
 
@@ -148,7 +161,7 @@ class CalcTest {
 	System.out.println("instrs evaluates to " + instrs.eval());  // instrs evaluates to 9.0
 
 	// a test for Problem 1c
-	// System.out.println("aexp converts to " + aexp.compile());
+	System.out.println("aexp converts to " + aexp.compile());
 
     }
 }
