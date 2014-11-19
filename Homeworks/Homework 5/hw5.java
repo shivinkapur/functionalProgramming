@@ -56,14 +56,44 @@ enum Op {
 
 // a type for arithmetic instructions
 interface AInstr {
+  void eval(Stack<Double> stack);
 }
 
 class Push implements AInstr {
     protected double val;
+
+    Push(double value) {
+      val = value;
+    }
+
+    public void eval(Stack<Double> stack) {
+      stack.push(val);
+    }
 }
 
 class Calculate implements AInstr {
     protected Op op;
+
+    Calculate(Op oper) {
+      op = oper;
+    }
+
+    public void eval(Stack<Double> stack) {
+      Double d2 = stack.pop();
+      Double d1 = stack.pop();
+      stack.push(op.calculate(d1,d2));
+    }
+}
+
+class Swap implements AInstr {
+  Swap(){}
+
+  public void eval(Stack<Double> stack) {
+    Double d2 = stack.pop();
+    Double d1 = stack.pop();
+    stack.push(d2);
+    stack.push(d1);
+  }
 }
 
 class Instrs {
@@ -71,9 +101,13 @@ class Instrs {
 
     public Instrs(List<AInstr> instrs) { this.instrs = instrs; }
 
-    // public double eval() {}  // Problem 1b
+    public double eval() {
+      Stack<Double> s = new Stack<Double>();
+      for(AInstr ai: instrs)
+        ai.eval(s);
+      return s.peek();
+    }  // Problem 1b
 }
-
 
 class CalcTest {
     public static void main(String[] args) {
@@ -103,15 +137,15 @@ class CalcTest {
   System.out.println("aexp evaluates to " + aexp7.eval()); // aexp evaluates to 4.0
 
   // a test for Problem 1b
-	// List<AInstr> is = new LinkedList<AInstr>();
-	// is.add(new Push(1.0));
-	// is.add(new Push(2.0));
-	// is.add(new Calculate(Op.PLUS));
-	// is.add(new Push(3.0));
-	// is.add(new Swap());
-	// is.add(new Calculate(Op.TIMES));
-	// Instrs instrs = new Instrs(is);
-	// System.out.println("instrs evaluates to " + instrs.eval());  // instrs evaluates to 9.0
+	List<AInstr> is = new LinkedList<AInstr>();
+	is.add(new Push(1.0));
+	is.add(new Push(2.0));
+	is.add(new Calculate(Op.PLUS));
+	is.add(new Push(3.0));
+	is.add(new Swap());
+	is.add(new Calculate(Op.TIMES));
+	Instrs instrs = new Instrs(is);
+	System.out.println("instrs evaluates to " + instrs.eval());  // instrs evaluates to 9.0
 
 	// a test for Problem 1c
 	// System.out.println("aexp converts to " + aexp.compile());
