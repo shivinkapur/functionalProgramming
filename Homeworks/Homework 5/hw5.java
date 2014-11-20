@@ -50,7 +50,8 @@ class BinOp implements AExp {
     }
 
     public List<AInstr> compile() {
-      List<AInstr> l = left.compile();
+      List<AInstr> l = new LinkedList<AInstr>();
+      l = left.compile();
       l.addAll(right.compile());
       l.add(new Calculate(op));
       return l;
@@ -82,6 +83,10 @@ class Push implements AInstr {
     public void eval(Stack<Double> stack) {
       stack.push(val);
     }
+
+    public String toString() {
+      return "Push " + val;
+    }
 }
 
 class Calculate implements AInstr {
@@ -96,6 +101,11 @@ class Calculate implements AInstr {
       Double d1 = stack.pop();
       stack.push(op.calculate(d1,d2));
     }
+
+
+    public String toString() {
+      return "Calculate " + op;
+    }
 }
 
 class Swap implements AInstr {
@@ -106,6 +116,11 @@ class Swap implements AInstr {
     Double d1 = stack.pop();
     stack.push(d2);
     stack.push(d1);
+  }
+
+
+  public String toString() {
+    return "Swap ";
   }
 }
 
