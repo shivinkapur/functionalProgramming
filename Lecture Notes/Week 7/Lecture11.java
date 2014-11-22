@@ -233,7 +233,7 @@ interface ObjectSet {
 }
 
 // We already had subtyping. Why did they inroduce generics? 
-// By subtyping, we can stroe anything in this ObjectSet.
+// By subtyping, we can store anything in this ObjectSet.
 
 /* 
 	What is advantage of GenericSet? 
