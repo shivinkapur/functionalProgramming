@@ -194,18 +194,35 @@ class NotFoundException extends Exception {}
 class DictImpl2<K,V> implements Dict<K,V> {
     protected Node<K,V> root;
 
-    DictImpl2() { throw new RuntimeException("not implemented"); }
+    // DictImpl2() { throw new RuntimeException("not implemented"); }
+    DictImpl2() { root = new Empty<K,V>(); }
 
-    public void put(K k, V v) { throw new RuntimeException("not implemented"); }
+    // public void put(K k, V v) { throw new RuntimeException("not implemented"); }
+    public void put(K k, V v) {
+      root = root.put(k, v);
+    }
 
-    public V get(K k) throws NotFoundException { throw new RuntimeException("not implemented"); }
+    // public V get(K k) throws NotFoundException { throw new RuntimeException("not implemented"); }
+    public V get(K k) throws NotFoundException {
+      return root.get(k);
+    }
 }
 
 interface Node<K,V> {
+  Node<K,V> put(K k, V v);
+  V get(K k) throws NotFoundException;
 }
 
 class Empty<K,V> implements Node<K,V> {
     Empty() {}
+
+    public Node<K,V> put(K k, V v) {
+      return new Entry<K,V>(k, v, this);
+    }
+
+    public V get(K k) throws NotFoundException {
+      throw new NotFoundException();
+    }
 }
 
 class Entry<K,V> implements Node<K,V> {
@@ -218,6 +235,20 @@ class Entry<K,V> implements Node<K,V> {
 	this.v = v;
 	this.next = next;
     }
+
+  public Node<K,V> put(K k, V v) {
+    if(k.equals(this.k))
+      this.v = v;
+    else
+      this.next = next.put(k,v);
+    return this;
+  }
+
+  public V get(K k) throws NotFoundException {
+    if(k.equals(this.k))
+      return this.v;
+    else return next.get(k);
+  }
 }
 
 
@@ -229,11 +260,31 @@ interface DictFun<A,R> {
 class DictImpl3<K,V> implements Dict<K,V> {
     protected DictFun<K,V> dFun;
 
-    DictImpl3() { throw new RuntimeException("not implemented"); }
+    // DictImpl3() { throw new RuntimeException("not implemented"); }
+    DictImpl3() {
+      dFun = new DictFun<K,V>() {
+        public V invoke(K k) throws NotFoundException {
+          throw new NotFoundException();
+        }
+      };
+    }
 
-    public void put(K k, V v) { throw new RuntimeException("not implemented"); }
+    // public void put(K k, V v) { throw new RuntimeException("not implemented"); }
+    public void put(K k, V v) {
+      DictFun<K,V> dictFun = dFun;
+      dFun = new DictFun<K,V>() {
+        public V invoke(K key) throws NotFoundException {
+          if(key.equals(k))
+            return v;
+          else return dictFun.invoke(key);
+        }
+      };
+    }
 
-    public V get(K k) throws NotFoundException { throw new RuntimeException("not implemented"); }
+    // public V get(K k) throws NotFoundException { throw new RuntimeException("not implemented"); }
+    public V get(K k) throws NotFoundException {
+      return dFun.invoke(k);
+    }
 }
 
 
@@ -254,39 +305,80 @@ interface FancyDict<K,V> extends Dict<K,V> {
     void putAll(List<Pair<K,V>> entries);
 }
 
+class FancyDictImpl3<K,V> extends DictImpl3<K,V> implements FancyDict<K,V> {
+
+  FancyDictImpl3() {
+    dFun = new DictFun<K,V>() {
+      public V invoke(K k) throws NotFoundException {
+        throw new NotFoundException();
+      }
+    };
+  }
+
+  public void clear() {
+    dFun = new DictFun<K,V>() {
+      public V invoke(K k) throws NotFoundException {
+        throw new NotFoundException();
+      }
+    };
+  }
+
+  public boolean containsKey(K k) {
+    try {
+      dFun.invoke(k);
+      return true;
+    } catch(NotFoundException e) {
+      return false;
+    }
+  }
+
+  public void putAll(List<Pair<K,V>> enteries) {
+    for(Pair<K,V> p : enteries) {
+      DictFun<K,V> dictFun = dFun;
+      dFun = new DictFun<K,V>() {
+        public V invoke(K key) throws NotFoundException {
+          if(key.equals(p.fst()))
+            return p.snd();
+          else return dictFun.invoke(key);
+        }
+      };
+    }
+  }
+}
 
 class DictTest {
     public static void main(String[] args) {
 
 	// a test for Problem 2a
-	// Dict<String,Integer> dict1 = new DictImpl2<String,Integer>();
-	// dict1.put("hello", 23);
-	// dict1.put("bye", 45);
-	// try {
-	//     System.out.println("bye maps to " + dict1.get("bye")); // prints 45
-	//     System.out.println("hi maps to " + dict1.get("hi"));  // throws an exception
-	// } catch(NotFoundException e) {
-	//     System.out.println("not found!");  // prints "not found!"
-	// }
+	Dict<String,Integer> dict1 = new DictImpl2<String,Integer>();
+	dict1.put("hello", 23);
+	dict1.put("bye", 45);
+	try {
+	    System.out.println("bye maps to " + dict1.get("bye")); // prints 45
+	    System.out.println("hi maps to " + dict1.get("hi"));  // throws an exception
+	} catch(NotFoundException e) {
+	    System.out.println("not found!");  // prints "not found!"
+	}
 
 	// a test for Problem 2b
-	// Dict<String,Integer> dict2 = new DictImpl3<String,Integer>();
-	// dict2.put("hello", 23);
-	// dict2.put("bye", 45);
-	// try {
-	//     System.out.println("bye maps to " + dict2.get("bye"));  // prints 45
-	//     System.out.println("hi maps to " + dict2.get("hi"));   // throws an exception
-	// } catch(NotFoundException e) {
-	//     System.out.println("not found!");  // prints "not found!"
-	// }
+	Dict<String,Integer> dict2 = new DictImpl3<String,Integer>();
+	dict2.put("hello", 23);
+	dict2.put("bye", 45);
+	try {
+	    System.out.println("bye maps to " + dict2.get("bye"));  // prints 45
+	    System.out.println("hi maps to " + dict2.get("hi"));   // throws an exception
+	} catch(NotFoundException e) {
+	    System.out.println("not found!");  // prints "not found!"
+	}
 
 	// a test for Problem 2c
-	// FancyDict<String,Integer> dict3 = new FancyDictImpl3<String,Integer>();
-	// dict3.put("hello", 23);
-	// dict3.put("bye", 45);
-	// System.out.println(dict3.containsKey("bye")); // prints true
-	// dict3.clear();
-	// System.out.println(dict3.containsKey("bye")); // prints false
+	FancyDict<String,Integer> dict3 = new FancyDictImpl3<String,Integer>();
+	dict3.put("hello", 23);
+	dict3.put("bye", 45);
+	System.out.println(dict3.containsKey("bye")); // prints true
+  System.out.println(dict3.containsKey("hi")); // prints false
+	dict3.clear();
+	System.out.println(dict3.containsKey("bye")); // prints false
 
     }
 }
