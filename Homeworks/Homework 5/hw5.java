@@ -305,27 +305,34 @@ interface DictFun<A,R> {
 class DictImpl3<K,V> implements Dict<K,V> {
     protected DictFun<K,V> dFun;
 
+    // DictImpl3() {
+    //     dFun = new DictFun<K,V>() {
+    //         public V invoke(K k) throws NotFoundException {
+    //             throw new NotFoundException();
+    //         }
+    //     };
+    // }
     DictImpl3() {
-        dFun = new DictFun<K,V>() {
-            public V invoke(K k) throws NotFoundException {
-                throw new NotFoundException();
-            }
-        };
+      dFun = (k) -> { throw new NotFoundException(); };
     }
 
-    // DictImpl3() {
-    //   dFun = ((k) -> invoke(k));
+    // public void put(K k, V v) {
+    //     DictFun<K,V> dictFun = dFun;
+    //     dFun = new DictFun<K,V>() {
+    //         public V invoke(K key) throws NotFoundException {
+    //             if(key.equals(k))
+    //                 return v;
+    //             else return dictFun.invoke(key);
+    //         }
+    //     };
     // }
-
     public void put(K k, V v) {
-        DictFun<K,V> dictFun = dFun;
-        dFun = new DictFun<K,V>() {
-            public V invoke(K key) throws NotFoundException {
-                if(key.equals(k))
-                    return v;
-                else return dictFun.invoke(key);
-            }
-        };
+      DictFun<K,V> dictFun = dFun;
+      dFun = (key) -> {
+          if(key.equals(k))
+              return v;
+          else return dictFun.invoke(key);
+      };
     }
 
     public V get(K k) throws NotFoundException {
@@ -353,20 +360,26 @@ interface FancyDict<K,V> extends Dict<K,V> {
 
 class FancyDictImpl3<K,V> extends DictImpl3<K,V> implements FancyDict<K,V> {
 
+    // FancyDictImpl3() {
+    //     dFun = new DictFun<K,V>() {
+    //         public V invoke(K k) throws NotFoundException {
+    //             throw new NotFoundException();
+    //         }
+    //     };
+    // }
     FancyDictImpl3() {
-        dFun = new DictFun<K,V>() {
-            public V invoke(K k) throws NotFoundException {
-                throw new NotFoundException();
-            }
-        };
+      dFun = (k) -> { throw new NotFoundException(); };
     }
 
+    // public void clear() {
+    //     dFun = new DictFun<K,V>() {
+    //         public V invoke(K k) throws NotFoundException {
+    //             throw new NotFoundException();
+    //         }
+    //     };
+    // }
     public void clear() {
-        dFun = new DictFun<K,V>() {
-            public V invoke(K k) throws NotFoundException {
-                throw new NotFoundException();
-            }
-        };
+      dFun = (k) -> { throw new NotFoundException(); };
     }
 
     public boolean containsKey(K k) {
@@ -378,15 +391,25 @@ class FancyDictImpl3<K,V> extends DictImpl3<K,V> implements FancyDict<K,V> {
         }
     }
 
+    // public void putAll(List<Pair<K,V>> enteries) {
+    //     for(Pair<K,V> p : enteries) {
+    //         DictFun<K,V> dictFun = dFun;
+    //         dFun = new DictFun<K,V>() {
+    //             public V invoke(K key) throws NotFoundException {
+    //                 if(key.equals(p.fst()))
+    //                     return p.snd();
+    //                 else return dictFun.invoke(key);
+    //             }
+    //         };
+    //     }
+    // }
     public void putAll(List<Pair<K,V>> enteries) {
         for(Pair<K,V> p : enteries) {
             DictFun<K,V> dictFun = dFun;
-            dFun = new DictFun<K,V>() {
-                public V invoke(K key) throws NotFoundException {
-                    if(key.equals(p.fst()))
-                        return p.snd();
-                    else return dictFun.invoke(key);
-                }
+            dFun = (key) -> {
+                if(key.equals(p.fst()))
+                    return p.snd();
+                else return dictFun.invoke(key);
             };
         }
     }
@@ -413,17 +436,17 @@ class DictTest {
       dict11.put("c", 3);
       dict11.put("d", 4);
       try {
-        System.out.println("'a' maps to " + dict11.get("a"));     // prints 1
-        System.out.println("'b' maps to " + dict11.get("b"));     // prints 2
-        System.out.println("'ok' maps to " + dict11.get("ok"));   // throws an exception
+          System.out.println("'a' maps to " + dict11.get("a"));     // prints 1
+          System.out.println("'b' maps to " + dict11.get("b"));     // prints 2
+          System.out.println("'ok' maps to " + dict11.get("ok"));   // throws an exception
       } catch(NotFoundException e) {
-        System.out.println("not found!");  // prints "not found!"
+          System.out.println("not found!");  // prints "not found!"
       }
       dict11.put("ok",22);
       try {
-        System.out.println("'ok' maps to " + dict11.get("ok"));   // prints 22
+          System.out.println("'ok' maps to " + dict11.get("ok"));   // prints 22
       } catch(NotFoundException e) {
-        System.out.println("catch 22");
+          System.out.println("catch 22");
       }
       System.out.println();
 
@@ -446,19 +469,19 @@ class DictTest {
       dict22.put("c", 3);
       dict22.put("d", 4);
       try {
-        System.out.println("'a' maps to " + dict22.get("a"));     // prints 1
-        System.out.println("'b' maps to " + dict22.get("b"));     // prints 2
-        System.out.println("'ok' maps to " + dict22.get("ok"));   // throws an exception
+          System.out.println("'a' maps to " + dict22.get("a"));     // prints 1
+          System.out.println("'b' maps to " + dict22.get("b"));     // prints 2
+          System.out.println("'ok' maps to " + dict22.get("ok"));   // throws an exception
       } catch(NotFoundException e) {
-        System.out.println("not found!");  // prints "not found!"
+          System.out.println("not found!");  // prints "not found!"
       }
       dict22.put("ok",22);
       try {
-        System.out.println("'ok' maps to " + dict22.get("ok"));   // prints 22
-        System.out.println("'c' maps to " + dict22.get("c"));     // prints 3
-        System.out.println("'e' maps to " + dict22.get("e"));     // throws an exception
+          System.out.println("'ok' maps to " + dict22.get("ok"));   // prints 22
+          System.out.println("'c' maps to " + dict22.get("c"));     // prints 3
+          System.out.println("'e' maps to " + dict22.get("e"));     // throws an exception
       } catch(NotFoundException e) {
-        System.out.println("catch 22");
+          System.out.println("catch 22");
       }
       System.out.println();
 
@@ -486,5 +509,12 @@ class DictTest {
       System.out.println(dict33.containsKey("a")); // prints true
       System.out.println(dict33.containsKey("ok")); // prints false
       System.out.println(dict33.containsKey("a")); // prints true
+      try {
+          System.out.println("'a' maps to " + dict33.get("a"));     // prints 1
+          System.out.println("'b' maps to " + dict33.get("b"));     // prints 2
+          System.out.println("'ok' maps to " + dict33.get("ok"));     // prints not found
+      } catch (NotFoundException e) {
+          System.out.println("not found!!");
+      }
     }
 }
