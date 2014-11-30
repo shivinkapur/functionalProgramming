@@ -115,22 +115,6 @@ class Calculate implements AInstr {
     }
 }
 
-class Swap implements AInstr {
-
-    public Swap(){}
-
-    public void eval(Stack<Double> stack) {
-        Double d2 = stack.pop();
-        Double d1 = stack.pop();
-        stack.push(d2);
-        stack.push(d1);
-    }
-
-    public String toString() {
-        return "Swap ";
-    }
-}
-
 class Instrs {
     protected List<AInstr> instrs;
 
@@ -179,7 +163,6 @@ class CalcTest {
       	is.add(new Push(2.0));
       	is.add(new Calculate(Op.PLUS));
       	is.add(new Push(3.0));
-      	is.add(new Swap());
       	is.add(new Calculate(Op.TIMES));
       	Instrs instrs = new Instrs(is);
       	System.out.println("instrs evaluates to " + instrs.eval());  // instrs evaluates to 9.0
