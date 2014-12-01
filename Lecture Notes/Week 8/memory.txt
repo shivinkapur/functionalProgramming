@@ -1,0 +1,117 @@
+
+// Java's memory model
+
+/*
+  Java is strongly typed (aka memory safe):
+  - "there are no pointers"
+     (actually pointers are everywhere but hidden)
+     - memory deleted by the garbage collector
+
+  - run-time checks for array bounds, null pointer dereferences
+
+  - enforced initialization of variables/fields
+    - some implicit, others explicit
+*/
+
+class Main {
+
+    void m() {
+
+	    // s is a pointer to a Set1 object
+	    // s is called a *reference*
+	Set s = new Set1();
+
+	    // dereference s to find the object
+	    // invoke the add method on the object
+	s.add("hello");
+
+	    // creates an alias:
+	    // both s and s2 point to the same object
+	Set s2 = s;
+
+	s2 = new Set1();
+
+	    // now both s and s2 have 2 elements in them.
+	    // because they point to the same object
+	s2.add("bye");
+
+	    // explicitly make a copy of s
+	Set s3 = s.clone();
+	
+	int x = 43;
+	int y = x;
+	y = 56;
+
+	Integer x = new Integer(43);
+	Integer y = x;
+	y = new Integer(y.getValue()+1);
+    }
+}
+
+// Parameter passing
+
+// Java has by-value parameter passing
+//   key point: often the values are pointers (references)
+
+// by value: copy the argument values into the formal parameters
+//   invariant: the original variables are unchanged
+
+int plus(int a, int b) {
+    a = a+b;
+    return a;
+}
+
+int x = 3;
+int y = 4;
+int z = plus(x,y);
+
+// the value of x and y are unchanged by the call
+
+---------
+
+class Integer {
+    int i;
+    Integer(int j) { this.i = j; }
+}
+
+Integer plus(Integer a, Integer b) {
+    a = new Integer(a.i + b.i);
+    return a;
+}
+
+Integer x = new Integer(3);
+Integer y = new Integer(4);
+Integer z = plus(x,y);
+
+// the value of x and y are unchanged by the call
+// but... if we have mutation, then we can still make changes
+// that are visible at the call site
+
+----------
+
+Integer plus(Integer a, Integer b) {
+    a.i = a.i + b.i;
+    return a;
+}
+
+Integer x = new Integer(3);
+Integer y = new Integer(4);
+Integer z = plus(x,y);
+// x and y have the same values as before the call
+// but x.i is now 7
+
+--------
+
+// Contrast with call-by-reference
+// creating an alias on the stack
+
+// C++
+
+int plus(int& a, int& b) {
+    a = a+b;
+    return a;
+}
+
+int x = 3;
+int y = 4;
+int z = plus(x,y);

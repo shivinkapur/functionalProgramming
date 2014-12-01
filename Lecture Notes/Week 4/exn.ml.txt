@@ -1,0 +1,31 @@
+
+
+(* Exceptions
+
+   - implicitly propagate errors up the call stack
+     - good: simplifies your code
+       - only the code that needs to handle the exception
+         does something special
+       - all other code just deals with the normal case
+     - bad: easy to forget to check for an exception
+
+*)
+
+(* another benefit: can use them to fail early
+   for example, consider a call to List.map over a large list
+   - can fail as soon as reach an element that causes an exception
+   - without exceptions, would have to wait to process the whole list
+*)
+
+
+let inc x = x+1
+
+exception NegativeError of int
+  
+let incIfNonNeg l =
+  try 
+    List.map (function x ->
+		if x < 0 then
+		  raise (NegativeError x) else (inc x)) l
+  with
+      NegativeError n -> []
