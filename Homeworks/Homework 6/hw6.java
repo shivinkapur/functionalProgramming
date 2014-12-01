@@ -5,7 +5,7 @@
    Others With Whom I Discussed Things:
 
    Other Resources I Consulted: http://homes.cs.washington.edu/~djg/teachingMaterials/grossmanSPAC_forkJoinFramework.html
-
+   http://www.drdobbs.com/jvm/lambdas-and-streams-in-java-8-libraries/240166818
 */
 
 import java.io.*;
@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.stream.*;
 import java.util.concurrent.RecursiveTask;
 import java.util.concurrent.RecursiveAction;
-// import java.util.concurrent.ForkJoinPool;
 
 
 // a marker for code that you need to implement
@@ -150,7 +149,7 @@ class PPMImage {
     public PPMImage gaussianBlur(int radius, double sigma) {
       RGB[] output_gaussian = new RGB[pixels.length];
       for(int i = 0; i < pixels.length; i++)
-      output_gaussian[i] = pixels[i];
+        output_gaussian[i] = pixels[i];
       double filter[][] = Gaussian.gaussianFilter(radius, sigma);
       GaussianTask gt = new GaussianTask(width, height, pixels, output_gaussian, 0, pixels.length, filter);
       gt.compute();
@@ -159,7 +158,17 @@ class PPMImage {
 
 	// implement using Java 8 Streams
     public PPMImage gaussianBlur2(int radius, double sigma) {
-      throw new ImplementMe();
+      // throw new ImplementMe();
+      RGB[] output_gaussian = new RGB[pixels.length];
+      for(int i = 0; i < pixels.length; i++)
+        output_gaussian[i] = pixels[i];
+      double filter[][] = Gaussian.gaussianFilter(radius, sigma);
+      int[] result = IntStream
+                    .range(0, pixels.length)
+                    // .forEach()
+                    // .map()
+                    .toArray();
+      return new PPMImage(width, height, maxColorVal, output_gaussian);
     }
 }
 
@@ -199,7 +208,7 @@ class MirrorTask extends RecursiveAction {
   }
 }
 
-class GaussianTask extends RecursiveAction {
+class GaussianTask extends RecursiveTask<Void> {
   protected int low, high, width, height;
   protected RGB[] input, output;
   protected double[][] filter;
@@ -216,11 +225,10 @@ class GaussianTask extends RecursiveAction {
     filter = f;
   }
 
-  protected void compute() {
+  protected Void compute() {
     int radius = (filter.length) / 2;
     if((high - low) <= SEQUENTIAL_CUTOFF) {
       for(int i = low; i < high; i++) {
-        // TO-DO
         double R_blur = 0.0, G_blur = 0.0, B_blur = 0.0;
         int row = i / width;
         int column = i % width;
@@ -228,15 +236,15 @@ class GaussianTask extends RecursiveAction {
           for(int y = -radius; y <= radius; y++) {
             int n_row = Math.min(Math.max(row + x, 0), height - 1);
             int n_col = Math.min(Math.max(column + y, 0), width - 1);
-            RGB curr = input[n_row * width + n_col];
-            R_blur += curr.R * filter[x+radius][y+radius];
-            G_blur += curr.G * filter[x+radius][y+radius];
-            B_blur += curr.B * filter[x+radius][y+radius];
+            RGB pixelsGauss = input[n_row * width + n_col];
+            R_blur += pixelsGauss.R * filter[x+radius][y+radius];
+            G_blur += pixelsGauss.G * filter[x+radius][y+radius];
+            B_blur += pixelsGauss.B * filter[x+radius][y+radius];
           }
         }
         output[i] = new RGB((int) Math.round(R_blur), (int) Math.round(G_blur), (int) Math.round(B_blur));
       }
-      return;
+      return null;
     }
 
     int mid = (high + low)/2;
@@ -246,6 +254,8 @@ class GaussianTask extends RecursiveAction {
     left.fork();
     right.compute();
     left.join();
+
+    return null;
   }
 }
 
