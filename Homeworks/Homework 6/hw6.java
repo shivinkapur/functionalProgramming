@@ -9,11 +9,12 @@
 */
 
 import java.io.*;
+import java.util.Arrays;
+
 import java.util.stream.*;
 import java.util.concurrent.RecursiveTask;
 import java.util.concurrent.RecursiveAction;
-import java.util.Arrays;
-
+// import java.util.concurrent.ForkJoinPool;
 
 
 // a marker for code that you need to implement
@@ -128,7 +129,6 @@ class PPMImage {
 
 	// implement using Java 8 Streams
     public PPMImage negate() {
-	    //  throw new ImplementMe();
       RGB[] output_negate = new RGB[pixels.length];
       Stream<RGB> s = Arrays.stream(pixels)
                         .parallel()
@@ -142,6 +142,7 @@ class PPMImage {
       RGB[] output_mirror = new RGB[pixels.length];
       MirrorTask mt = new MirrorTask(width, pixels, output_mirror, 0, pixels.length);
       mt.compute();
+      // new ForkJoinPool().invoke(mt);
       return new PPMImage(width, height, maxColorVal, output_mirror);
     }
 
@@ -162,11 +163,11 @@ class PPMImage {
     }
 }
 
-class MirrorTask extends RecursiveTask<Void> {
+class MirrorTask extends RecursiveAction {
   protected int low, high, width;
   protected RGB[] input, output;
 
-  protected static final int SEQUENTIAL_CUTOFF = 10000;
+  protected static final int SEQUENTIAL_CUTOFF = 1000;
 
   MirrorTask(int w, RGB[] ip, RGB[] op, int l, int h) {
     width = w;
@@ -176,25 +177,25 @@ class MirrorTask extends RecursiveTask<Void> {
     high = h;
   }
 
-  protected Void compute() {
+  protected void compute() {
     if((high - low) <= SEQUENTIAL_CUTOFF) {
       for(int i = low; i < high; i++) {
         int column = i % width;
+        int row = i / width;
         int mirror_column = width - column - 1;
-        int index = (i/width) * width + mirror_column;
+        int index = row * width + mirror_column;
         output[index] = new RGB(input[i].R, input[i].G, input[i].B);
       }
-      return null;
+      return;
     }
 
-    int mid = (high + low)/2 + low;
+    int mid = (high + low)/2;
     MirrorTask left = new MirrorTask(width, input, output, low, mid);
     MirrorTask right = new MirrorTask(width, input, output, mid, high);
 
     left.fork();
     right.compute();
     left.join();
-    return null;
   }
 }
 
@@ -216,15 +217,32 @@ class GaussianTask extends RecursiveAction {
   }
 
   protected void compute() {
+    int radius = (filter.length) / 2;
     if((high - low) <= SEQUENTIAL_CUTOFF) {
       for(int i = low; i < high; i++) {
         // TO-DO
+        double R_blur = 0.0, G_blur = 0.0, B_blur = 0.0;
+        int row = i / width;
+        int column = i % width;
+        for(int x = -radius; x <= radius; x++) {
+          for(int y = -radius; y <= radius; y++) {
+            int n_row = Math.min(Math.max(row + x, 0), height - 1);
+            int n_col = Math.min(Math.max(column + y, 0), width - 1);
+            RGB curr = input[n_row * width + n_col];
+            R_blur += curr.R * filter[x+radius][y+radius];
+            G_blur += curr.G * filter[x+radius][y+radius];
+            B_blur += curr.B * filter[x+radius][y+radius];
+          }
+        }
+        output[i] = new RGB((int) Math.round(R_blur), (int) Math.round(G_blur), (int) Math.round(B_blur));
       }
       return;
     }
-    int mid = (high + low)/2 + low;
+
+    int mid = (high + low)/2;
     GaussianTask left = new GaussianTask(width, height, input, output, low, mid, filter);
     GaussianTask right = new GaussianTask(width, height, input, output, mid, high, filter);
+
     left.fork();
     right.compute();
     left.join();
@@ -239,5 +257,9 @@ class Main {
     p_negate.toFile("negate.ppm");
     PPMImage p_mirror = p.mirrorImage();
     p_mirror.toFile("mirror.ppm");
+    PPMImage p_gaussian1 = p.gaussianBlur(10,2);
+    p_gaussian1.toFile("gaussian1.ppm");
+    PPMImage p_gaussian2 = p.gaussianBlur2(10,2);
+    p_gaussian2.toFile("gaussian2.ppm");
   }
 }
