@@ -129,7 +129,6 @@ class PPMImage {
 
 	// implement using Java 8 Streams
     public PPMImage negate() {
-      RGB[] output_negate = new RGB[pixels.length];
       Stream<RGB> s = Arrays.stream(pixels)
                         .parallel()
                         .map(p -> new RGB(maxColorVal - p.R, maxColorVal - p.G, maxColorVal - p.B));
@@ -161,6 +160,7 @@ class PPMImage {
       double filter[][] = Gaussian.gaussianFilter(radius, sigma);
       RGB[] result = IntStream
                     .range(0, pixels.length)
+                    .parallel()
                     .mapToObj( i -> {
                                 double R_blur = 0.0, G_blur = 0.0, B_blur = 0.0;
                                 int row = i / width;
@@ -186,7 +186,7 @@ class MirrorTask extends RecursiveAction {
   protected int low, high, width;
   protected RGB[] input, output;
 
-  protected static final int SEQUENTIAL_CUTOFF = 1000;
+  protected static final int SEQUENTIAL_CUTOFF = 10000;
 
   MirrorTask(int w, RGB[] ip, RGB[] op, int l, int h) {
     width = w;
