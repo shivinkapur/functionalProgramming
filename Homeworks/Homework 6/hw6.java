@@ -6,6 +6,7 @@
 
    Other Resources I Consulted: http://homes.cs.washington.edu/~djg/teachingMaterials/grossmanSPAC_forkJoinFramework.html
    http://www.drdobbs.com/jvm/lambdas-and-streams-in-java-8-libraries/240166818
+   http://www.leveluplunch.com/java/examples/java-util-stream-intstream-example/
 */
 
 import java.io.*;
@@ -141,7 +142,6 @@ class PPMImage {
       RGB[] output_mirror = new RGB[pixels.length];
       MirrorTask mt = new MirrorTask(width, pixels, output_mirror, 0, pixels.length);
       mt.compute();
-      // new ForkJoinPool().invoke(mt);
       return new PPMImage(width, height, maxColorVal, output_mirror);
     }
 
@@ -158,17 +158,27 @@ class PPMImage {
 
 	// implement using Java 8 Streams
     public PPMImage gaussianBlur2(int radius, double sigma) {
-      // throw new ImplementMe();
-      RGB[] output_gaussian = new RGB[pixels.length];
-      for(int i = 0; i < pixels.length; i++)
-        output_gaussian[i] = pixels[i];
       double filter[][] = Gaussian.gaussianFilter(radius, sigma);
-      int[] result = IntStream
+      RGB[] result = IntStream
                     .range(0, pixels.length)
-                    // .forEach()
-                    // .map()
-                    .toArray();
-      return new PPMImage(width, height, maxColorVal, output_gaussian);
+                    .mapToObj( i -> {
+                                double R_blur = 0.0, G_blur = 0.0, B_blur = 0.0;
+                                int row = i / width;
+                                int column = i % width;
+                                for(int x = -radius; x <= radius; x++) {
+                                  for(int y = -radius; y <= radius; y++) {
+                                    int n_row = Math.min(Math.max(row + x, 0), height - 1);
+                                    int n_col = Math.min(Math.max(column + y, 0), width - 1);
+                                    RGB pixelsGauss = pixels[n_row * width + n_col];
+                                    R_blur += pixelsGauss.R * filter[x+radius][y+radius];
+                                    G_blur += pixelsGauss.G * filter[x+radius][y+radius];
+                                    B_blur += pixelsGauss.B * filter[x+radius][y+radius];
+                                  }
+                                }
+                                 return new RGB((int) Math.round(R_blur), (int) Math.round(G_blur), (int) Math.round(B_blur));
+                               })
+                    .toArray(size -> new RGB[size]);
+      return new PPMImage(width, height, maxColorVal, result);
     }
 }
 
