@@ -279,7 +279,7 @@ class Main {
     p_mirror.toFile("mirror.ppm");
     PPMImage p_gaussian1 = p.gaussianBlur(10,2);
     p_gaussian1.toFile("gaussian1.ppm");
-    PPMImage p_gaussian2 = p.gaussianBlur2(10,2);
+    PPMImage p_gaussian2 = p.gaussianBlur2(3,1);
     p_gaussian2.toFile("gaussian2.ppm");
   }
 }
