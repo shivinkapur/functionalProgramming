@@ -1,0 +1,30 @@
+trend over time from "how" to "what"
+
+example: parallelism
+
+1. multithreading
+   - explicitly managing concurrency
+
+2. fork/join parallelism
+   - hides the threads under "tasks"
+     - tasks can be implemented with threads
+        but that's hidden from you
+     - in fact, they coalesce tasks into a single thread when
+        appropriate, etc.
+
+3. streaming library
+   - no explicit parallelism
+   
+
+holy grail: invent a general-purpose "what" language
+
+Prolog and related languages are the best we have right now
+
+the basic idea:
+
+declare a set of *facts*
+
+declare a set of *rules*
+  - ways to learn new facts from old facts
+
+a program is a *query* that asks what things are true
