@@ -42,7 +42,7 @@ eval(if(E1, _, E3), ENV, V) :- eval(E1, ENV, boolval(B)), B = false, eval(E3, EN
 
 eval(function(X, E), ENV, funval(X, E, NEW_ENV)) :- eval(E, ENV, V), put(var(X), V, ENV, NEW_ENV).
 
-eval(funcall(function(X, E), E2), ENV, V) :- eval(E2, ENV, V2), put(var(X), V2, ENV, ENV2), eval(function(X, E), ENV2, funval(X1, E1, NEW_ENV)), eval(E1, ENV2, V).
+eval(funcall(function(X, E), E2), ENV, V) :- eval(E2, ENV, V2), put(var(X), V2, ENV, ENV2), eval(function(X, E), ENV2, funval(_, E1, _)), eval(E1, ENV2, V).
 
 /* Question 4 */
 
