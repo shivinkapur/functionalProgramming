@@ -75,4 +75,17 @@ eval( if( geg( var(x), var(y)), var(x), var(y)), [[var(x), intval(100)], [var(y)
 eval( if( geg( var(x), var(y)), var(x), var(y)), [ [var(y), intval(1000)]], V ).
 eval( if( geg( var(x), var(y)), var(x), var(y)), [ ], V ).
 
-eval(function(x,intconst(3)), E, V). 
+eval(function(x,intconst(3)), E, V).
+
+eval(funcall(function(x,if(geq(var(x),intconst(0)),intconst(1),intconst(0))), intconst(34)), [], V).
+eval(funcall(function(x,intconst(5)), intconst(34)), [], V).
+
+
+eval(function(x,if(geq(var(x),intconst(0)),intconst(1),intconst(0))), [var(x), inval(34)], V).
+
+
+length(Actions,L), blocksworld(world([a,b,c],[],[],none), Actions, world([],[],[a,b,c],none)).
+length(Actions,L), blocksworld(world([],[],[],none), Actions, world([],[],[],none)).
+length(Actions,L), blocksworld(world([a,b,c,d],[],[],none), Actions, world([],[],[a,b,c,d],none)).
+length(Actions,L), blocksworld(world([a,b],[c],[],none), Actions, world([],[],[a,b,c],none)).
+length(Actions,L), blocksworld(world([a,b],[c],[],d), Actions, world([],[],[a,b,c,d],none)).
