@@ -5,17 +5,20 @@
 
   UID: 404259526
 
+  Consulted with: Lakshman Krishnamoorthy and Ashwini Bhatkhande
+
 */
 
 
 /* Question 1 */
+
 duplist([], []).
-duplist([X], [X, X]).
 duplist([XH | XT], [YH1, YH2 | YT]) :- duplist(XT, YT), XH = YH1, XH = YH2.
 
 
 
 /* Question 2 */
+
 put(K, V, [], [[K, V]]).
 put(K, V, [[K, _] | D],[[K, V] | D]).
 put(K, V, [[K1, V1] | D1], [[K1, V1] | D2]) :- K \= K1, put(K, V, D1, D2).
@@ -31,7 +34,8 @@ greater(intval(V1), intval(V2), V) :- V1 >= V2, V = boolval(true).
 greater(intval(V1), intval(V2), V) :- V1 < V2, V = boolval(false).
 
 eval(intconst(I), _, intval(I)).
-eval(boolconst(B), _, boolval(B)).
+eval(boolconst(true), _, boolval(true)).
+eval(boolconst(false), _, boolval(false)).
 
 eval(var(X), ENV, V) :- get(X, ENV, V).
 
@@ -40,7 +44,8 @@ eval(geq(E1, E2), ENV, V) :- eval(E1, ENV, V1), eval(E2, ENV, V2), greater(V1, V
 eval(if(E1, E2, _), ENV, V) :- eval(E1, ENV, boolval(B)), B = true, eval(E2, ENV, V).
 eval(if(E1, _, E3), ENV, V) :- eval(E1, ENV, boolval(B)), B = false, eval(E3, ENV, V).
 
-eval(function(X, E), ENV, funval(X, E, NEW_ENV)) :- eval(E, ENV, V), put(X, V, ENV, NEW_ENV).
+eval(function(X, E), ENV, funval(X, E, ENV)).
+% eval(function(X, E), ENV, funval(X, E, NEW_ENV)) :- eval(E, ENV, V), put(X, V, ENV, NEW_ENV).
 
 eval(funcall(function(X, E), E2), ENV, V) :- eval(E2, ENV, V2), put(X, V2, ENV, ENV2), eval(function(X, E), ENV2, funval(_, E1, _)), eval(E1, ENV2, V).
 
