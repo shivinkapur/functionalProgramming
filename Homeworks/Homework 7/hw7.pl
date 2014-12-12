@@ -28,7 +28,7 @@ get(K, [[_, _] | D], V) :- get(K, D, V).
 /* Question 3 */
 
 greater(intval(V1), intval(V2), V) :- V1 >= V2, V = boolval(true).
-greater(_, _, V) :- V = boolval(false).
+greater(intval(V1), intval(V2), V) :- V1 < V2, V = boolval(false).
 
 eval(intconst(I), _, intval(I)).
 eval(boolconst(B), _, boolval(B)).
@@ -40,10 +40,9 @@ eval(geq(E1, E2), ENV, V) :- eval(E1, ENV, V1), eval(E2, ENV, V2), greater(V1, V
 eval(if(E1, E2, _), ENV, V) :- eval(E1, ENV, boolval(B)), B = true, eval(E2, ENV, V).
 eval(if(E1, _, E3), ENV, V) :- eval(E1, ENV, boolval(B)), B = false, eval(E3, ENV, V).
 
-eval(function(X, E), ENV, V) :- eval(E, ENV, V).
+eval(function(X, E), ENV, funval(X, E, NEW_ENV)) :- eval(E, ENV, V), put(var(X), V, ENV, NEW_ENV).
 
-eval(funcall(function(X, E), E2), ENV, V) :- eval(E2, ENV, V2), put(var(X), V2, ENV, ENV2), eval(function(X, E), ENV2, V).
-
+eval(funcall(function(X, E), E2), ENV, V) :- eval(E2, ENV, V2), put(var(X), V2, ENV, ENV2), eval(function(X, E), ENV2, funval(X1, E1, NEW_ENV)), eval(E1, ENV2, V).
 
 /* Question 4 */
 
