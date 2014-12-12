@@ -26,25 +26,23 @@ get(K, [[_, _] | D], V) :- get(K, D, V).
 
 
 /* Question 3 */
+
+greater(intval(V1), intval(V2), V) :- V1 >= V2, V = boolval(true).
+greater(_, _, V) :- V = boolval(false).
+
 eval(intconst(I), _, intval(I)).
 eval(boolconst(B), _, boolval(B)).
 
-eval(var(X), [[var(X), V]], V).
-eval(var(X), [[var(X), V] | _], V). % need to handle for | _ case
-eval(var(X), [[var(K), _] | R], V1) :- X \= K, eval(var(X), R, V1).
+eval(var(X), ENV, V) :- get(var(X), ENV, V).
 
-eval(geg(E1, E2), ENV, boolval(true)) :- eval(E1, ENV, intval(V1)), eval(E2, ENV, intval(V2)), V1 > V2.
-eval(geg(E1, E2), ENV, boolval(false)) :- eval(E1, ENV, intval(V1)), eval(E2, ENV, intval(V2)), V1 < V2.
+eval(geq(E1, E2), ENV, V) :- eval(E1, ENV, V1), eval(E2, ENV, V2), greater(V1, V2, V).
 
-eval(if(E1, E2, _), ENV, V) :- eval(E1, ENV, boolval(true)), eval(E2, ENV, V).
-eval(if(E1, _, E3), ENV, V) :- eval(E1, ENV, boolval(false)), eval(E3, ENV, V).
+eval(if(E1, E2, _), ENV, V) :- eval(E1, ENV, boolval(B)), B = true, eval(E2, ENV, V).
+eval(if(E1, _, E3), ENV, V) :- eval(E1, ENV, boolval(B)), B = false, eval(E3, ENV, V).
 
-%eval(function(X, E), ENV, funval(X, E, [[var(X), V] | ENV])) :- eval(E, ENV, V).
-eval(function(X, E), ENV, funval(X, E, NEW_ENV)) :- eval(E, ENV, V), put(var(X), V, ENV, NEW_ENV).
-% eval(function(X, E), ENV, _) :- eval(E, ENV, V), put(var(X), V, ENV, ENV_NEW), ENV = ENV_NEW.
+eval(function(X, E), ENV, V) :- eval(E, ENV, V).
 
-%eval(funcall(E1, E2), ENV, V) :- eval(E1, ENV, funval(X, E, NEW_ENV)), eval(E2, NEW_ENV, V).
-eval(funcall(function(X, E), E2), ENV, V) :- eval(E2, ENV, V2), put(var(X), V2, ENV, ENV2), eval(function(X, E), ENV2, funval(X, E, NEW_ENV)), get(var(X), NEW_ENV, V).
+eval(funcall(function(X, E), E2), ENV, V) :- eval(E2, ENV, V2), put(var(X), V2, ENV, ENV2), eval(function(X, E), ENV2, V).
 
 
 /* Question 4 */

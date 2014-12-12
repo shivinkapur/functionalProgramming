@@ -14,7 +14,7 @@ duplist(Y,[1,1]).
 duplist(X,[]).
 duplist(X,[1,2,3]).
 duplist(X,[1,1,2,2,3,3]).
-
+duplist([1,2], [1,2,1,2]).
 
 
 
@@ -31,7 +31,7 @@ get(K,[[2,hello],[1,hello]],hello).
 get(K,[[2,hello],[1,hello]],hello).
 get(K,[[2,two],[1,hello]],V).
 put(1,hello,[[1,one],[2,two]],D).
-
+put(1, hello, [[2, bye], [3, hi]], [[3, hi], [2, bye], [1, hello]]).
 
 
 eval(intconst(2),[],X).
@@ -63,17 +63,17 @@ eval(var(x), [E,[var(z),boolval(true)]] ,intval(3)).
 eval(var(x), [E,[var(z),boolval(true)],[]] ,intval(3)).
 eval(var(x), [[]] ,intval(3)).
 
-eval(geg(intval(3),intval(4)),[],X).
-eval(geg(intconst(3),intconst(4)),[],X).
-eval(geg(var(x),var(y)),[[var(x),intval(3)],[var(y),intval(4)]],X).
-eval(geg(var(x),var(y)),[[var(x),intval(4)],[var(y),intval(3)]],X).
+eval(geq(intval(3),intval(4)),[],X).
+eval(geq(intconst(3),intconst(4)),[],X).
+eval(geq(var(x),var(y)),[[var(x),intval(3)],[var(y),intval(4)]],X).
+eval(geq(var(x),var(y)),[[var(x),intval(4)],[var(y),intval(3)]],X).
 
-eval( if( geg( intconst(3), intconst(4)), var(x), var(y)), [[var(x), intval(100)], [var(y), intval(10)]], V ).
-eval( if( geg( intconst(5), intconst(4)), var(x), var(y)), [[var(x), intval(100)], [var(y), intval(10)]], V ).
-eval( if( geg( var(x), var(y)), var(x), var(y)), [[var(x), intval(100)], [var(y), intval(10)]], V ).
-eval( if( geg( var(x), var(y)), var(x), var(y)), [[var(x), intval(100)], [var(y), intval(1000)]], V ).
-eval( if( geg( var(x), var(y)), var(x), var(y)), [ [var(y), intval(1000)]], V ).
-eval( if( geg( var(x), var(y)), var(x), var(y)), [ ], V ).
+eval( if( geq( intconst(3), intconst(4)), var(x), var(y)), [[var(x), intval(100)], [var(y), intval(10)]], V ).
+eval( if( geq( intconst(5), intconst(4)), var(x), var(y)), [[var(x), intval(100)], [var(y), intval(10)]], V ).
+eval( if( geq( var(x), var(y)), var(x), var(y)), [[var(x), intval(100)], [var(y), intval(10)]], V ).
+eval( if( geq( var(x), var(y)), var(x), var(y)), [[var(x), intval(100)], [var(y), intval(1000)]], V ).
+eval( if( geq( var(x), var(y)), var(x), var(y)), [ [var(y), intval(1000)]], V ).
+eval( if( geq( var(x), var(y)), var(x), var(y)), [ ], V ).
 
 eval(function(x,intconst(3)), E, V).
 
@@ -81,7 +81,7 @@ eval(funcall(function(x,if(geq(var(x),intconst(0)),intconst(1),intconst(0))), in
 eval(funcall(function(x,intconst(5)), intconst(34)), [], V).
 
 
-eval(function(x,if(geq(var(x),intconst(0)),intconst(1),intconst(0))), [var(x), inval(34)], V).
+eval(function(x,if(geq(var(x),intconst(0)),intconst(1),intconst(0))), [[var(x), intval(34)]], V).
 
 
 length(Actions,L), blocksworld(world([a,b,c],[],[],none), Actions, world([],[],[a,b,c],none)).
