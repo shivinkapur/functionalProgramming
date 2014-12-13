@@ -6,6 +6,7 @@ move([[H | T], P2, P3]], to(peg1, peg3), [[T, P2, [H | P3]]) :- isLegal(H, P3).
 move([P1, [H | T], P3]], to(peg2, peg3), [[P1, T, [H | P3]]) :- isLegal(H, P3).
 move([P1, [H | T], P3]], to(peg2, peg1), [[[H | P1], P2, P3]) :- isLegal(H, P1).
 move([P1, P2, [H | T]]], to(peg3, peg1), [[[H | P1], P2, P3]) :- isLegal(H, P1).
+move([P1, P2, [H | T]]], to(peg3, peg2), [[P1, [H | P2], P3]) :- isLegal(H, P2).
 
 towerOfHanoi(Init, Init, []).
 towerOfHanoi(Init, Goal, [Action | Actions]) :- move(Init, Mid, Action), towerOfHanoi(Mid, Goal, Actions).
