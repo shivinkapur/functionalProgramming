@@ -1,0 +1,75 @@
+
+Unification
+----------
+
+t1 = t2
+
+find a *substitution* s (mapping from variables to terms) such that
+s(t1) syntactically equal to s(t2)
+
+if one exists, this substitution is called a *unifier* for t1 and t2
+
+Prolog always produces the *most general unifier* (MGU) u:
+  - u is a unifier of t1 and t2
+  - for any other unifier s of t1 and t2, there exists s0 such that
+     s0(u(t1)) = s(t1) and s0(u(t2)) = s(t2)
+
+let's define unification (most general unifier):
+input: two terms
+output: substitution
+
+a is an atom
+X is a variable
+t is an arbitrary term
+
+a = a  ---> {}
+
+X = X  ---> {}
+
+X = t ---> {(X,t)}
+
+t = X ---> {(X,t)}
+
+/* just showing for a binary predicate */
+a(t1,t2) = a(t1',t2')
+  t1 = t1' ---> s1
+  t2 = t2' ---> s2
+ result is s1 U s2
+
+a few caveats:
+
+- the union may not be satisfiable (may not be a valid substitution):
+   f(X,a) = f(b,X)
+     X=b ---> {(X,b)}
+     a=X ---> {(X,a)}
+     no
+
+- the union may be satisfiable but needs to be "solved"
+   f(X,a) = f(Y,Y)
+     X = Y ---> {(X,Y)}
+     a = Y ---> {(Y,a)}
+   union is {(X,Y),(Y,a)}
+   need to put the substitution into *solved form*:
+     any variable in the domain does not appear in the range
+     {(X,a),(Y,a)}
+
+- we can get cyclic constraints
+   X = f(X) ---> {(X,f(X))}
+   no finite term satisfies this constraint
+
+   
+How the Prolog Interpreter Works
+-----------------------------
+
+Maintain a stack of goals that need to be solved.
+  - initially there's just one goal: the query
+
+Every step:
+  - pop off the top goal from the stack
+  - unify it with the head of some rule
+    - if it unifies, push the body of the rule onto the stack
+        need to solve the body from left to right
+
+  in what order do we try rules?
+    - try them all from top to bottom
+    

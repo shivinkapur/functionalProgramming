@@ -1,0 +1,24 @@
+class Assert {
+	void abs(int x) {
+		int res = x;
+		assert(res >= 0);
+	}
+
+	public static void main(String[] args) {
+		Assert a = new Assert();
+		a.abs(-3);
+	}
+}
+
+
+// PBJ Project. PBNJ
+class Assert {
+	int abs(int x) ensures result >=0 {
+		return x;
+	}
+
+	public static void main(String[] args) {
+		Assert a = new Assert();
+		System.out.println(a.abs(-3));
+	}
+}

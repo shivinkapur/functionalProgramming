@@ -1,0 +1,65 @@
+Unification
+
+t1 = t2
+
+t2 = t2' --> s2
+result is s1 U s2
+
+a few caveats:
+
+- the union may not be satisfiable(may not be a calid substitution)
+	f(X,a) = f(Y,Y)
+	X = Y --> {(Y,X)}
+	a = Y --> {(Y,a)}
+
+
+- we can get cyclic constraints
+	X = f(X) --> {(X,f(X))}
+	no finite term satisfies this constraint
+
+	append([],L,L).
+
+
+How the prolog interpreter works?
+
+Maintain a stack of goals that need to be solved.
+	- initially there is just one goal: the query
+
+Every Step:
+	- pop off the top goal from the stack
+	- unify it with the head of some rule
+	- if it unifies, push the body of the rule onto the stack
+		need to solve the body from left to right
+	- This is like DFS
+
+In what order do we try rules?
+	- try them all from top to bottom
+
+p(f(Y)) :- q(Y), r(Y).	/* 1 */
+
+p(b).	/* 5 */
+
+q(h(Z)) :- t(Z).	/* 2 */
+
+r(h(a)).	/* 3 */
+
+t(a).	/* 4 */
+
+/* query: p(x) */
+ans: X = f(h(a))
+This was found by a brute force search
+Stack 
+
+
+Simple example of infinite loop
+
+u(X) :- u(X)
+u(a)
+/* query: u(X) */
+
+Advanced example:
+reverse([1],L)
+reverse(L,[1])
+
+reverse([1,2],L)
+reverse(L,[1,2])
