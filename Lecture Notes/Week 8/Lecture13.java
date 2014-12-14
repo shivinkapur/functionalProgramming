@@ -1,15 +1,15 @@
 /*
 	Not good to use getters, setters. Thats not really object oriented. As you are not using it as an object. U r using it as manipulating data.
 
-	Ideal style is to not do just imperitive programming. Do object oriented programmins!!
+	Ideal style is to not do just imperitive programming. Do object oriented programming!!
 */
 
 /*
 	Java's Memory Model
 
 	Java is strongly typed:
-	- "there are no pointers" 
-		(actually ointers are everywhere but hidden)
+	- "there are no pointers"
+		(actually pointers are everywhere but hidden)
 		- memory deleted by the garbage collector
 
 	- run-time checks for array bounds, null pointer dereferences
@@ -21,7 +21,7 @@
 	SQL injection, stack smashing, aribtrary code execution
 */
 
-// everything is a pointer 
+// everything is a pointer
 
 class Main {
 	void m() {
@@ -65,13 +65,13 @@ class Main {
 
 // Parameter Passing
 
-// Java has by-value parameter passing 
+// Java has by-value parameter passing
 // 		key point : often the vaues are pointers (references)
 
 // by vlaue: copy the argument values into the formal parameters
-//  	invariant: the original variables are unv=changed
+//  	invariant: the original variables are unchanged
 
-int plus(init a, int b) {
+int plus(int a, int b) {
 	a = a+b;
 	return a;
 }
@@ -95,7 +95,7 @@ Integer y = new Integer(4);
 Integer z = plus(x,y);
 
 // the value of a and y are unchanged by the call
-// but...if we have mutation, the we can still make changes
+// but...if we have mutation, then we can still make changes
 // that are visible at the call site
 
 Integer plus(Integer a, Integer b) {
@@ -105,7 +105,7 @@ Integer plus(Integer a, Integer b) {
 
 Integer x = new Integer(3);
 Integer y = new Integer(4);
-Integer z = plus(x,y); 
+Integer z = plus(x,y);
 // x and y have the same vallues as before the call
 // but x.i is now 7
 
@@ -120,4 +120,3 @@ int plus(int& a, int& b) {
 int x = 3;
 int y = 4;
 int z = plus(x,y);
-

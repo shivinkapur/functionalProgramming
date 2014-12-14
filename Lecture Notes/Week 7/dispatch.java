@@ -25,12 +25,27 @@ class D extends C {
 
 class Main {
     public static void main(String[] args) {
-	C c = new C();
-	D d = new D();
-	c = d;
-	c.p(c);
-	c.p(d);
+    	C c = new C();
+    	D d = new D();
+      c.p(c); // dynamic dispatch happens here
+      c.p(d);
+      System.out.println();
+      c = d;
+    	c.p(c);
+    	c.p(d);
 
+      System.out.println();
+      C d2 = new D();
+      C c2 = new C();
+      d2.p(c);
+      d2.p(d);
+      System.out.println();
+      c2 = d2;
+      c2.p(c);
+      c2.p(d);
+
+      D d3 = new D();
+      // d3 = d2; will give error
     }
 }
 
@@ -45,4 +60,3 @@ class Main {
    Java methods are dynamically dispatch on the receiver parameter
    Java methods can be statically overloaded on the other parameters
 */
-

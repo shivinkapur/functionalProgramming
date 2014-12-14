@@ -7,12 +7,12 @@ import java.util.*;
 	- dynamic dispatch
 
 	Key focus: interface vs. implementation
-	(Ocaml modules) 
+	(Ocaml modules)
 
 	why is it a good thing to separate interface/impl?
 
 	o flexibility for the implementer
-		- can change implementation without affecting clients 
+		- can change implementation without affecting clients
 		  as long as the interface doesn't change
 		- can monetize your implementation
 		- can hide private details
@@ -20,7 +20,7 @@ import java.util.*;
 			- my proprietary algorithm
 
 	o client doens't need to care about implementation details
-	Note: small talk was first OO language. Java 8, Scala 
+	Note: small talk was first OO language. Java 8, Scala
 
 */
 
@@ -33,7 +33,7 @@ import java.util.*;
 		void addElem(String s);
 		int size();
 	}
-/* 
+/*
 	Separating iterface from implementation simplifies reasoning about correctness.
 	Splits reasoning into two pieces:
 
@@ -84,13 +84,13 @@ class Set1 implements Set {
 
 class Main {
 	public static void main(String[] args) {
-		Client c = new Client();	
+		Client c = new Client();
 		c.myClient(new Set1());
 		c.myClient(new Set2(0));
 	}
 }
 
-// Generics is parametric polymorphism. No type inference, like in Ocaml, so we need to mention 
+// Generics is parametric polymorphism. No type inference, like in Ocaml, so we need to mention
 // Java is a memory safe language
 // Pure object oriented languages: Java(?), Ruby, Small Talk
 
@@ -134,7 +134,7 @@ class Set2 implements Set {
 	}
 }
 
-/* 
+/*
 	Kinds of polymorphism
 
 	1. Parametric polymorphism (aka Generics)
@@ -184,7 +184,7 @@ class GenericSet1<T> implements GenericSet<T> {
 }
 
 
-//  Subtyping 
+//  Subtyping
 
 // a subtype of Set
 interface RemovableSet extends Set {
@@ -199,7 +199,7 @@ class NewClient {
 		rs.remove("hello");
 		// s.remove("hello"); // type error. Set doesn't have remove
 		this.m(rs);
-		// this.m(s); 
+		// this.m(s);
 		/* Lect10.java:202: error: method m in class NewClient cannot be applied to given types;
 		this.m(s);
 		    ^
@@ -217,7 +217,7 @@ class NewClient {
 }
 
 /*
-	LECTURE 11 STARTS HERE	
+	LECTURE 11 STARTS HERE
 *
 *
 *
@@ -232,15 +232,15 @@ interface ObjectSet {
 	Object get(); // get a random item from the set
 }
 
-// We already had subtyping. Why did they inroduce generics? 
+// We already had subtyping. Why did they inroduce generics?
 // By subtyping, we can store anything in this ObjectSet.
 
-/* 
-	What is advantage of GenericSet? 
+/*
+	What is advantage of GenericSet?
 		- GenericSet can ensure homogeneity.
 		  GenericSet<String> is guaranteed to only contain Strings.
 
-		- GenericDet is statically type safe
+		- GenericSet is statically type safe
 
 		ObjectSet s = new ObjectSet();
 		s.addElem("hello");
@@ -297,7 +297,7 @@ class Rectangle {
 // How do I make square a subtypoe but not inherit from Rect? Can't really do this in Java
 
 /*
-	I want Sqaure and Rectangle to be compatible: 
+	I want Sqaure and Rectangle to be compatible:
 		- pass them both to same places. But I don't want Sqaure to inherit code from Rectangle
 */
 
@@ -378,7 +378,7 @@ class D extends C {
 
 	void p(D d) {
 		System.out.println("DpD");
-	}		
+	}
 }
 class Main {
 	public static void main(String[] args) {
@@ -395,7 +395,7 @@ class Main {
 		d.p(d);
 
 		// Off Topic
-		Object[] myarray = args[]; 
+		Object[] myarray = args[];
 		// allows this but really shouldn't. As arrays are mutable.
 		myarray[0] = 34;
 		String s = args[0]; // will throw ArrayThrowException
@@ -421,7 +421,7 @@ class Main {
 
 	OO style
 
-	objects tthat talk to each other by sneding messages
+	objects tthat talk to each other by sending messages
 
 	each object knows how to do certain things
 		- publishes what it knows how to do through an interface
@@ -468,12 +468,12 @@ class Board {
 	}
 }
 
-/* 
+/*
 	What would you do in OCaml?
 
 	type piece = Rook of ... | Pawn of ... | Bishop of ... | ...
 
-	let move(p,x,y) = 
+	let move(p,x,y) =
 		match p with
 			Rook(..) -> ...
 			| Pawn(..) -> ...
