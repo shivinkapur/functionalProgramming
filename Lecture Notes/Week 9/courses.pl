@@ -101,8 +101,7 @@ move([P,W,G,C],cabbage, [O,W,G,O]) :-
 move([P,W,G,C], nothing, [O,W,G,C]) :-
    W\=G, G\=C, flip(P,O).
 
-/* moves(Start, Actions, End) */   
+/* moves(Start, Actions, End) */
 moves(Start, [], Start).
 moves(Start, [A|As], End) :-
   move(Start, A, Mid), moves(Mid, As, End).
-  

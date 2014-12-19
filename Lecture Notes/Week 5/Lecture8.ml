@@ -6,7 +6,7 @@ let rec fact n =
 (*
 []									fact 3 ==> 6
 [(n,3)]								n*fact 2 ==> 6
-[(n,2);(n,3)]						
+[(n,2);(n,3)]
 [(n-1);(n,2);(n,3)]
 [(n-0);(n-1);(n,2);(n,3)]
 
@@ -36,7 +36,7 @@ int fact(int n) {
 	- accumulates the partial result as we recurse
  *)
 
-let fact2 n = 
+let fact2 n =
 	let rec helper i acc =
 		match i with
 			| 0 -> acc
@@ -55,7 +55,7 @@ The complier will apply a tail-call optimization;
 reuse the space parameters on a tail call
 *)
 
-(* 
+(*
 A tail-call is a function call that is the last operation done in a function body
 
 A function is *tail recursive* if all its recursive calls are tail calls.
@@ -63,7 +63,7 @@ A function is *tail recursive* if all its recursive calls are tail calls.
 Ocaml guarantees to implement the tail-call optimization for all tail-recursive functions
  *)
 
- let rec sumList l = 
+ let rec sumList l =
  	match l with
  	| [] -> 0
  	| x::xs -> x + (sumList xs)
@@ -78,12 +78,12 @@ Ocaml guarantees to implement the tail-call optimization for all tail-recursive 
  	linear heap space in the sixe of the list
   *)
 
- let rec diffList l = 
+ let rec diffList l =
  	match l with
  	| [] -> 0
  	| x::xs -> x - (diffList xs)
 
-(* diffList with tail recrusion won't work properly 
+(* diffList with tail recrusion won't work properly
 	Difference is not commutative (sum is)
 	Check for diffList [1;3;4;6]
 *)
@@ -108,8 +108,8 @@ let diffList3 l =
  *)
 
 
-(* 
-	You can convert ant function to be tail recursuve
+(*
+	You can convert any function to be tail recursuve
 	- it will use a constant amount of stack space
 	- but its not necessarily an asymptotic improvement in space
 	- eg: may need to allocate linear heap space
@@ -133,7 +133,7 @@ let sumTree2 t =
 
 (* Tail recursive Version *)
 let sumTreeTR t =
-	let rec helper ts acc = 
+	let rec helper ts acc =
 		match ts with
 		| [] -> acc
 		| Leaf::rest -> helper rest acc
@@ -142,8 +142,8 @@ let sumTreeTR t =
 
 (* let mytree = Node(Node(Leaf,1,Leaf),2,(Node(Leaf,3,Leaf)));; *)
 
-(* 
-	helper [Node(Node(Leaf,1,Leaf),2,(Node(Leaf,3,Leaf)))] 0 
+(*
+	helper [Node(Node(Leaf,1,Leaf),2,(Node(Leaf,3,Leaf)))] 0
 	helper [Node(Node(Leaf,1,Leaf);(Node(Leaf,3,Leaf)))] 2
 	helper [Leaf;Leaf;(Node(Leaf,3,Leaf)))] 3
 	helper [Leaf;(Node(Leaf,3,Leaf)))] 3
@@ -155,7 +155,3 @@ let sumTreeTR t =
 	constant stack space
 	heap space propotional to the height of the tree
  *)
-
-
-
-

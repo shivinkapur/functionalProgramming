@@ -294,11 +294,11 @@ class Rectangle {
 	// bunch of methods
 }
 
-// How do I make square a subtypoe but not inherit from Rect? Can't really do this in Java
+// How do I make square a subtype but not inherit from Rect? Can't really do this in Java
 
 /*
-	I want Sqaure and Rectangle to be compatible:
-		- pass them both to same places. But I don't want Sqaure to inherit code from Rectangle
+	I want Square and Rectangle to be compatible:
+		- pass them both to same places. But I don't want Square to inherit code from Rectangle
 */
 
 interface Quad {
@@ -307,7 +307,7 @@ interface Quad {
 	// ..
 }
 
-class Sqaure implements Quad {
+class Square implements Quad {
 	int size;
 	// ..
 }
@@ -421,7 +421,7 @@ class Main {
 
 	OO style
 
-	objects tthat talk to each other by sending messages
+	objects that talk to each other by sending messages
 
 	each object knows how to do certain things
 		- publishes what it knows how to do through an interface
