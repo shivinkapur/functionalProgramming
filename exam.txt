@@ -1,0 +1,44 @@
+Exam: Monday 11:30am
+  Lakretz 110
+
+closed book
+closed notes
+
+programming problems
+multiple choice
+short answer
+
+OCaml
+ - look at the midterm
+ - recursion, higher-order functions, datatypes, pattern matching,
+    exceptions
+ - tail recursion
+ - interface vs. implementation in modules
+
+Concepts:    
+ - static / dynamic typechecking
+ - strong / weak typechecking
+ - static scoping
+   - for every use of a variable, can statically determine
+      which declaration it refers to
+      - lexically closest in the surrounding scope
+ - parametric polymorphism
+ - static overloading
+
+Object oriented
+ - inheritance
+ - subtyping
+ - dynamic dispatch
+ - memory and pointers in Java
+ - exceptions in Java
+ - generics in Java
+ - parallelism (fork/join and streams)
+
+Python
+ - comprehensions
+
+Prolog
+ - unification
+ - building the proof tree for a query
+ - writing simple programs
+ 
